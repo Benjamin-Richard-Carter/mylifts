@@ -1,8 +1,6 @@
 import "~/styles/globals.css";
-
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-
 import { TRPCReactProvider } from "~/trpc/react";
 
 const inter = Inter({
@@ -16,6 +14,8 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+const theme = "default";
+
 export default function RootLayout({
   children,
 }: {
@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`font-sans ${inter.variable} ${theme}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}
         </TRPCReactProvider>

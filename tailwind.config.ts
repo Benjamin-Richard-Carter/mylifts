@@ -1,5 +1,6 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import { createThemes } from "tw-colors";
 
 export default {
   content: ["./src/**/*.tsx"],
@@ -10,5 +11,11 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    createThemes({
+      default: {
+        primary: "#181818",
+      },
+    }),
+  ],
 } satisfies Config;
