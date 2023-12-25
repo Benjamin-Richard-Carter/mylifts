@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${inter.variable} ${theme} container bg-surface-200 `}
+        className={`font-sans ${inter.variable} ${theme} container overflow-hidden bg-surface-200 `}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <ReduxProvider>

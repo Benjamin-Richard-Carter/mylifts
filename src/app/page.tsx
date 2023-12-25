@@ -1,13 +1,21 @@
 "use client";
 
 import { NavBar } from "~/components/ui/elements/navbar";
+import { Pill } from "~/components/ui/primatives/Pill";
 
 export default function Home() {
   return (
     <>
-      <NavBar>test</NavBar>
+      <NavBar>
+        <div className="flex flex-row gap-3">
+          <Pill square layoutMode="shrink">
+            <div className="aspect-square p-4">O</div>
+          </Pill>
 
-      <div className="flex flex-col gap-3 bg-gray-500 p-3">test</div>
+          <Pill layoutMode="expand">fdg</Pill>
+          <Pill layoutMode="expand">fdg</Pill>
+        </div>
+      </NavBar>
     </>
   );
 }
