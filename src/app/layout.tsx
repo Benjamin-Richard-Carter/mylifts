@@ -2,7 +2,8 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
-import { ReduxWrapper } from "~/components/wrappers/redux";
+import { ReduxProvider } from "~/redux/reduxProvider";
+import { DndContextWrapper } from "~/components/dnd/dndContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export default function RootLayout({
         className={`font-sans ${inter.variable} ${theme} container bg-surface-200 `}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
-          <ReduxWrapper>{children}</ReduxWrapper>
+          <ReduxProvider>
+            <DndContextWrapper>{children}</DndContextWrapper>
+          </ReduxProvider>
         </TRPCReactProvider>
       </body>
     </html>
