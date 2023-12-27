@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ReduxProvider } from "~/redux/reduxProvider";
-import { DndContextWrapper } from "~/components/dnd/dndContext";
+import { DndContextWrapper } from "~/components/dnd/primatives/dndContext";
 
 const inter = Inter({
   subsets: ["latin"],

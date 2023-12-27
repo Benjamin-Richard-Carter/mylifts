@@ -1,7 +1,7 @@
 "use client";
 import { useDroppable } from "@dnd-kit/core";
 import type { UseDroppableArguments } from "@dnd-kit/core";
-import { DroppableCTX } from "./dndContext";
+import { DroppableCTX } from "./primatives/dndContext";
 
 type Props = {
   children: React.ReactNode;
@@ -10,8 +10,6 @@ type Props = {
 
 export const DndDroppableWrapper = ({ children, params }: Props) => {
   const droppableReturn = useDroppable({ ...params });
-
-  const { over, isOver } = droppableReturn;
 
   return (
     <span ref={droppableReturn.setNodeRef}>

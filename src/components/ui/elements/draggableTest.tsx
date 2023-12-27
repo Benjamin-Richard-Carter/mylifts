@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { PresentationalCTX } from "~/components/dnd/dndContext";
+import { PresentationalCTX } from "~/components/dnd/primatives/dndContext";
 
 type Props = {
   id: string;

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DroppableCTX } from "~/components/dnd/dndContext";
+import { DroppableCTX } from "~/components/dnd/primatives/dndContext";
 
 type Props = {
   id: string;

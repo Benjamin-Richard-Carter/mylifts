@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { DragOverlay, useDndMonitor } from "@dnd-kit/core";
-import { DndDraggableWrapper } from "./dndDraggable";
-import { DraggableItem, SortableItem } from "~/types/dnd";
+import { DndDraggableWrapper } from "../primatives/dndDraggable";
+import { DraggableItem } from "~/types/dnd";
 
 type Props = {
   items: DraggableItem[];
