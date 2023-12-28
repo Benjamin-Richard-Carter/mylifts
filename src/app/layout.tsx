@@ -4,17 +4,19 @@ import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ReduxProvider } from "~/components/redux/reduxProvider";
 import { DndContextWrapper } from "~/components/dnd/primatives/dndContext";
-import { Metadata, Viewport } from "next";
+import { Metadata } from "next";
+import { getCutoutValue } from "~/styles/themes";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
+const theme = "dark";
+
 export const metadata: Metadata = {
   title: "mylifts",
   description: "mylifts - workout tracker",
-
   appleWebApp: {
     title: "mylifts",
     statusBarStyle: "black-translucent",
@@ -22,11 +24,15 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  viewportFit: "cover",
-};
-
-const theme = "light";
+export function generateViewport({}) {
+  return {
+    width: "device-width",
+    initialScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
+    themeColor: getCutoutValue(theme),
+  };
+}
 
 export default function RootLayout({
   children,
@@ -36,10 +42,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${inter.variable} ${theme} container overflow-hidden bg-surface-2 `}
+        className={`font-sans ${inter.variable} ${theme} pl-safe" container h-screen overflow-hidden bg-surface-2 pr-safe`}
       >
-        <div className="pt-safe bg-surface-1"></div>
-
         <TRPCReactProvider cookies={cookies().toString()}>
           <ReduxProvider>
             <DndContextWrapper>{children}</DndContextWrapper>
