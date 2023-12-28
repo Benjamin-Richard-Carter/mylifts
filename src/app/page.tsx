@@ -8,11 +8,9 @@ export default function Home() {
   return (
     <>
       <NavBar>
-        <div className="flex flex-row gap-3">
+        <div className="text-content-3 flex flex-row gap-3">
           <Pill layoutMode="square">
-            <span className="text-text-300">
-              <TbCheck />
-            </span>
+            <TbCheck />
           </Pill>
 
           <Pill layoutMode="expand">Test</Pill>

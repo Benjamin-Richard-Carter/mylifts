@@ -7,11 +7,11 @@ export const NavBar = ({ children }: PropsWithChildren) => {
     <div className="sticky top-0 w-full">
       <LayoutGroup id="nav">
         <motion.div
-          className="w-full bg-surface-100 sm:mt-7 sm:bg-opacity-0"
+          className="bg-surface-1 w-full sm:mt-7 sm:bg-opacity-0"
           layout
         >
           <motion.div
-            className="flex max-w-full flex-col gap-4 p-4 sm:bg-surface-100"
+            className="sm:bg-surface-1 flex max-w-full flex-col gap-4 p-4"
             layout
             style={{ borderRadius: "35px" }}
           >

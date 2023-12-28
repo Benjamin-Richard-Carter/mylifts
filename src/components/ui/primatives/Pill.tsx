@@ -22,7 +22,7 @@ export const Pill = ({
     <Element
       onClick={onClick}
       layoutId={layoutID}
-      className={`flex h-12 items-center justify-center rounded-full bg-surface-300 p-3 text-2xl
+      className={`bg-surface-2 flex h-12 items-center justify-center rounded-full p-3 text-2xl
         ${layoutMode === "expand" && "w-full"}
         ${layoutMode === "square" && "aspect-square"}
         `}

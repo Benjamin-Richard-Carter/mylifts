@@ -1,7 +1,7 @@
 "use client";
 import { useDroppable } from "@dnd-kit/core";
 import type { UseDroppableArguments } from "@dnd-kit/core";
-import { DroppableCTX } from "./primatives/dndContext";
+import { DroppableCTX } from "./dndContext";
 
 type Props = {
   children: React.ReactNode;
