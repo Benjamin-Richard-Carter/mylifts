@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <>
       <NavBar>
-        <div className="text-content-3 flex flex-row gap-3">
-          <Pill layoutMode="square">
+        <div className="flex flex-row gap-3 text-content-3">
+          <Pill layoutMode="square" button>
             <TbCheck />
           </Pill>
 
