@@ -34,6 +34,7 @@
     "react-redux": "^9.0.4",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
+    "tailwindcss-safe-area": "^0.4.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

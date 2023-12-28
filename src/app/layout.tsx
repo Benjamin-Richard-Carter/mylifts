@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ReduxProvider } from "~/components/redux/reduxProvider";
 import { DndContextWrapper } from "~/components/dnd/primatives/dndContext";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,8 +14,6 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "mylifts",
   description: "mylifts - workout tracker",
-  viewport:
-    "width=device-width, viewport-fit=contain, initial-scale=1.0, user-scalable=no",
 
   appleWebApp: {
     title: "mylifts",
@@ -24,7 +22,11 @@ export const metadata: Metadata = {
   },
 };
 
-const theme = "dark";
+export const viewport: Viewport = {
+  viewportFit: "cover",
+};
+
+const theme = "light";
 
 export default function RootLayout({
   children,
@@ -34,8 +36,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${inter.variable} ${theme} container overflow-hidden bg-background `}
+        className={`font-sans ${inter.variable} ${theme} container overflow-hidden bg-surface-2 `}
       >
+        <div className="pt-safe bg-surface-1"></div>
+
         <TRPCReactProvider cookies={cookies().toString()}>
           <ReduxProvider>
             <DndContextWrapper>{children}</DndContextWrapper>

@@ -3,6 +3,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 import { createThemes } from "tw-colors";
 import type { Theme } from "~/types/styles";
 import { darkTheme } from "./src/styles/themes/dark";
+import { lightTheme } from "./src/styles/themes/light";
 
 export default {
   content: ["./src/**/*.tsx"],
@@ -24,6 +25,8 @@ export default {
   plugins: [
     createThemes({
       dark: darkTheme,
+      light: lightTheme,
     } satisfies Record<string, Theme>),
+    require("tailwindcss-safe-area"),
   ],
 } satisfies Config;

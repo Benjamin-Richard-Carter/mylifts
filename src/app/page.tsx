@@ -20,6 +20,7 @@ export default function Home() {
           <Pill layoutMode="shrink">Test2</Pill>
         </div>
       </NavBar>
+      hello hello
     </>
   );
 }

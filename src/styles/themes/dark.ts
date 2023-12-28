@@ -2,6 +2,7 @@ import { Theme } from "~/types/styles";
 
 export const darkTheme: Theme = {
   background: "#1F1F1F",
+  cutout: "#1F1F1F",
   alert: "#b85a03",
 
   surface: {
