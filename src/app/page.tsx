@@ -1,10 +1,12 @@
-"use client";
-
 import { NavBar } from "~/components/ui/elements/navbar";
 import { Pill } from "~/components/ui/primatives/Pill";
 import { TbCheck } from "react-icons/tb";
+import { getServerAuthSession } from "~/server/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerAuthSession();
+  console.log(session);
+
   return (
     <>
       <NavBar>

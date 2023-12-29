@@ -1,22 +1,16 @@
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 
 type Props = {
   layoutID?: string;
   layoutMode: "expand" | "shrink" | "square";
-  button?: boolean;
   onClick?: React.MouseEventHandler;
   children: React.ReactNode | undefined;
 };
 
-export const Pill = ({
-  children,
-  layoutID,
-  layoutMode,
-  button,
-  onClick,
-}: Props) => {
-  const Element = button ? motion.button : motion.div;
+export const Pill = ({ children, layoutID, layoutMode, onClick }: Props) => {
+  const Element = onClick ? motion.button : motion.div;
 
   return (
     <Element

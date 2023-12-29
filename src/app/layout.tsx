@@ -34,7 +34,7 @@ export function generateViewport({}) {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${inter.variable} ${theme} pl-safe" container h-screen overflow-hidden bg-surface-2 pr-safe`}
+        className={`font-sans ${inter.variable} ${theme} h-screen overflow-hidden overscroll-contain bg-surface-2 pr-safe pl-safe`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <ReduxProvider>
