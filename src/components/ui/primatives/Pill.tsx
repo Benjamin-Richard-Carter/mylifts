@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import type { PropsWithChildren } from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 
@@ -7,10 +7,14 @@ type Props = {
   layoutID?: string;
   layoutMode: "expand" | "shrink" | "square";
   onClick?: React.MouseEventHandler;
-  children: React.ReactNode | undefined;
 };
 
-export const Pill = ({ children, layoutID, layoutMode, onClick }: Props) => {
+export const Pill = ({
+  children,
+  layoutID,
+  layoutMode,
+  onClick,
+}: PropsWithChildren<Props>) => {
   const Element = onClick ? motion.button : motion.div;
 
   return (

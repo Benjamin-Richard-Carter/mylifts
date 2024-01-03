@@ -2,13 +2,16 @@
 import { useDroppable } from "@dnd-kit/core";
 import type { UseDroppableArguments } from "@dnd-kit/core";
 import { DroppableCTX } from "./dndContext";
+import type { PropsWithChildren } from "react";
 
 type Props = {
-  children: React.ReactNode;
   params: UseDroppableArguments;
 };
 
-export const DndDroppableWrapper = ({ children, params }: Props) => {
+export const DndDroppableWrapper = ({
+  children,
+  params,
+}: PropsWithChildren<Props>) => {
   const droppableReturn = useDroppable({ ...params });
 
   return (

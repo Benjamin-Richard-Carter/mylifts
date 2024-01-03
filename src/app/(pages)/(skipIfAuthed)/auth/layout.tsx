@@ -2,12 +2,9 @@
 import { LayoutGroup } from "framer-motion";
 import { NavBar } from "~/components/nav/navBar";
 import { Default } from "~/components/nav/states/default";
+import type { PropsWithChildren } from "react";
 
-type Props = {
-  children?: React.ReactNode;
-};
-
-export default async function AuthDialogLayout({ children }: Props) {
+export default function AuthDialogLayout({ children }: PropsWithChildren) {
   return (
     <>
       <NavBar>

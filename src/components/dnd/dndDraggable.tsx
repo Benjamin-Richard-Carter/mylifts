@@ -1,18 +1,18 @@
 "use client";
 import { useDraggable, UseDraggableArguments } from "@dnd-kit/core";
 import { DraggableCTX } from "./dndContext";
+import type { PropsWithChildren } from "react";
 
 type Props = {
   opacityOnDrag?: number;
   params: UseDraggableArguments;
-  children: React.ReactNode;
 };
 
 export const DndDraggableWrapper = ({
   children,
   params,
   opacityOnDrag,
-}: Props) => {
+}: PropsWithChildren<Props>) => {
   const draggableReturn = useDraggable({ ...params });
   const { attributes, listeners, setNodeRef, isDragging } = draggableReturn;
 

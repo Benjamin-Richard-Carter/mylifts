@@ -2,12 +2,9 @@
 import { DragMoveEvent, DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import { PresentationalCTX } from "./dndContext";
 import { useState } from "react";
+import type { PropsWithChildren } from "react";
 
-type Props = {
-  children: React.ReactNode | undefined;
-};
-
-export const DndPresentational = ({ children }: Props) => {
+export const DndPresentational = ({ children }: PropsWithChildren) => {
   const [activeData, setActiveData] = useState<DragMoveEvent | null>(null);
 
   useDndMonitor({

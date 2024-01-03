@@ -6,6 +6,7 @@ import { ReduxProvider } from "~/components/redux/reduxProvider";
 import { DndContextWrapper } from "~/components/dnd/dndContext";
 import { Metadata } from "next";
 import { getCutoutValue } from "~/styles/themes";
+import type { PropsWithChildren } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,11 +41,7 @@ export function generateViewport({}) {
   };
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html
       lang="en"

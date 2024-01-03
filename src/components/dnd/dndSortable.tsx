@@ -1,18 +1,18 @@
 "use client";
 import { UseSortableArguments, useSortable } from "@dnd-kit/sortable";
 import { SortableCTX } from "./dndContext";
+import type { PropsWithChildren } from "react";
 
 type Props = {
   opacityOnDrag?: number;
   params: UseSortableArguments;
-  children: React.ReactNode;
 };
 
 export const DndSortableWrapper = ({
   children,
   params,
   opacityOnDrag,
-}: Props) => {
+}: PropsWithChildren<Props>) => {
   const sortableReturn = useSortable({ ...params });
   const { attributes, listeners, setNodeRef, isDragging } = sortableReturn;
   const style = {
