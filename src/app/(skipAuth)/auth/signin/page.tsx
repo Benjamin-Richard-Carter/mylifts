@@ -1,20 +1,24 @@
 import { getProviders } from "next-auth/react";
-import { ProvidersReturnAwaited } from "~/types/auth";
-import { use } from "react";
-import { AuthProviderButton } from "~/components/ui/primatives/AuthProviderButton";
+import { Suspense } from "react";
+import { AuthProviderButtons } from "~/components/auth/AuthProviderButtons";
+import ModalBody from "~/components/ui/modal/ModalBody";
 
-export default function SignIn() {
-  const providers: ProvidersReturnAwaited = use(getProviders());
-
-  if (providers === null) {
-    return <div>Loading...</div>;
-  }
+export default async function SignIn() {
+  const providers = getProviders();
 
   return (
-    <div className="grid grid-flow-row gap-4">
-      {Object.values(providers).map((provider) => (
-        <AuthProviderButton provider={provider} />
-      ))}
-    </div>
+    <ModalBody layoutID="auth">
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="flex w-full flex-col items-center justify-center p-3">
+          <div className="p-4 text-center text-lg text-content-1">
+            Sign up or log in with an existing account
+          </div>
+        </div>
+
+        <div className="grid w-full grid-flow-row gap-4 p-4">
+          <AuthProviderButtons providersReturn={providers} />
+        </div>
+      </Suspense>
+    </ModalBody>
   );
 }

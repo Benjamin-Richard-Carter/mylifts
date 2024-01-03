@@ -5,7 +5,7 @@ export const themes: Record<string, Theme> = {
     background: "#1F1F1F",
     cutout: "#161616",
     alert: "#b85a03",
-    warning: "#c02222",
+    warning: "#c93e3e",
 
     surface: {
       1: "#161616",

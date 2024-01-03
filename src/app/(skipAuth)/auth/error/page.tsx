@@ -1,27 +1,35 @@
+"use client";
+import { ModalButton } from "~/components/ui/modal/ModalButton";
+import { FaUndo } from "react-icons/fa";
 import { TiWarningOutline } from "react-icons/ti";
+import ModalBody from "~/components/ui/modal/ModalBody";
+import { useRouter } from "next/navigation";
 
-export default function AuthError() {
+export default function SignIn() {
+  const router = useRouter();
+
   return (
-    <div className="flex w-full flex-col items-center justify-center overflow-clip rounded-3xl bg-surface-1">
-      <div className="bg-warning flex w-full flex-col items-center justify-center  p-3">
-        <div className="p-1 text-5xl text-content-1">
-          <TiWarningOutline />
-        </div>
-      </div>
+    <>
+      <ModalBody layoutID="auth">
+        <div className="flex w-full flex-col items-center justify-center p-3">
+          <span className="pt-2 text-7xl text-warning">
+            <TiWarningOutline />
+          </span>
 
-      <div className="flex flex-col items-center justify-center p-3">
-        <div className="pt-7 text-xl font-bold text-content-1">
-          Sign in failed
-        </div>
+          <div className="flex flex-col gap-5 p-5 pb-10 pt-8 text-center">
+            <p className="text-xl text-content-1">Failed to sign in</p>
+            <p className="text-md text-content-3">
+              Please try again or use another authentication method
+            </p>
+          </div>
 
-        <div className="p-5 pt-10 text-center text-content-2">
-          Please try again or use a different authentication method
+          <ModalButton
+            onClick={() => router.push("/auth/signin")}
+            icon={<FaUndo />}
+            label="Back to sign-in page"
+          />
         </div>
-
-        <button className="mt-4 w-full rounded-2xl bg-surface-2 p-3 text-content-3">
-          Back to login
-        </button>
-      </div>
-    </div>
+      </ModalBody>
+    </>
   );
 }

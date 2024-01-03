@@ -1,5 +1,5 @@
 import "~/styles/globals.css";
-import { Inter } from "next/font/google";
+import { Inter, Bebas_Neue } from "next/font/google";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ReduxProvider } from "~/components/redux/reduxProvider";
@@ -10,6 +10,12 @@ import { getCutoutValue } from "~/styles/themes";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const bebas = Bebas_Neue({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-display",
 });
 
 const theme = "dark";
@@ -40,9 +46,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`h-full ${inter.variable} ${bebas.variable} ${theme} overscroll-contain`}
+    >
       <body
-        className={`font-sans ${inter.variable} ${theme} h-screen overflow-hidden overscroll-contain bg-surface-2 pr-safe pl-safe`}
+        className={`flex h-full flex-col overflow-hidden overscroll-contain bg-background font-sans pr-safe pl-safe`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <ReduxProvider>
