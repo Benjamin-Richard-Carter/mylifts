@@ -1,10 +1,10 @@
 "use client";
 import { useDndMonitor } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { DndSortableWrapper } from "../primatives/dndSortable";
+import { DndSortableWrapper } from "./dndSortable";
 import { SortableItem } from "~/types/dnd";
 import { useState } from "react";
-import { DndPresentational } from "../primatives/dndPresentational";
+import { DndPresentational } from "./dndPresentational";
 
 type Props = {
   items: SortableItem[];

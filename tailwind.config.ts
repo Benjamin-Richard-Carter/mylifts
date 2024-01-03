@@ -8,7 +8,6 @@ export default {
   theme: {
     screens: {
       sm: "640px",
-      md: "768px",
     },
     container: {
       center: true,

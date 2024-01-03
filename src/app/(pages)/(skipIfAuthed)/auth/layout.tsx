@@ -1,19 +1,18 @@
 "use client";
 import { LayoutGroup } from "framer-motion";
-import { HeroBar } from "~/components/ui/elements/heroBar";
+import { NavBar } from "~/components/nav/navBar";
+import { Default } from "~/components/nav/states/default";
 
-export default async function AuthDialogLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+type Props = {
+  children?: React.ReactNode;
+};
+
+export default async function AuthDialogLayout({ children }: Props) {
   return (
     <>
-      <HeroBar>
-        <span className="w-full p-4 text-center text-4xl tracking-wider text-content-1 ">
-          mylifts
-        </span>
-      </HeroBar>
+      <NavBar>
+        <Default />
+      </NavBar>
 
       <div className="container flex h-full grow">
         <div className="flex grow items-center justify-center">

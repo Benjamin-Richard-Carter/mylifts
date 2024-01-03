@@ -8,7 +8,7 @@ type Props = {
   label: string;
 };
 
-export const ModalButton = ({ onClick, icon, label }: Props) => {
+export const DialogButton = ({ onClick, icon, label }: Props) => {
   return (
     <motion.button
       onClick={onClick}
@@ -19,7 +19,6 @@ export const ModalButton = ({ onClick, icon, label }: Props) => {
           <div className="flex aspect-square h-5 items-center justify-center text-2xl">
             {icon}
           </div>
-
           <div className="flex justify-end">{label}</div>
         </>
       )}

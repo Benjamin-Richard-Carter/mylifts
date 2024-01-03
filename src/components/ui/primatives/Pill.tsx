@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
   layoutID?: string;
@@ -16,10 +17,11 @@ export const Pill = ({ children, layoutID, layoutMode, onClick }: Props) => {
     <Element
       onClick={onClick}
       layoutId={layoutID}
-      className={`flex h-12 items-center justify-center rounded-full bg-surface-2 p-3 text-2xl
-        ${layoutMode === "expand" && "w-full"}
-        ${layoutMode === "square" && "aspect-square"}
-        `}
+      className={twMerge(
+        "flex h-12 w-fit items-center justify-center rounded-full bg-surface-2 p-3",
+        layoutMode === "expand" && "w-full",
+        layoutMode === "square" && "aspect-square",
+      )}
       style={{ borderRadius: "9999px" }}
     >
       {children}

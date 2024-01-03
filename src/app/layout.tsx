@@ -3,7 +3,7 @@ import { Inter, Bebas_Neue } from "next/font/google";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ReduxProvider } from "~/components/redux/reduxProvider";
-import { DndContextWrapper } from "~/components/dnd/primatives/dndContext";
+import { DndContextWrapper } from "~/components/dnd/dndContext";
 import { Metadata } from "next";
 import { getCutoutValue } from "~/styles/themes";
 

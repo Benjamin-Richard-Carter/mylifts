@@ -1,8 +1,8 @@
 "use client";
-import { ModalButton } from "~/components/ui/modal/ModalButton";
+import { DialogButton } from "~/components/dialog/dialogButton";
 import { FaUndo } from "react-icons/fa";
 import { TiWarningOutline } from "react-icons/ti";
-import ModalBody from "~/components/ui/modal/ModalBody";
+import ModalBody from "~/components/dialog/dialogBody";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
@@ -23,7 +23,7 @@ export default function SignIn() {
             </p>
           </div>
 
-          <ModalButton
+          <DialogButton
             onClick={() => router.push("/auth/signin")}
             icon={<FaUndo />}
             label="Back to sign-in page"

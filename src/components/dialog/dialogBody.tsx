@@ -6,7 +6,7 @@ type Props = {
   layoutID?: string;
 };
 
-export default function ModalBody({ children, layoutID }: Props) {
+export default function DialogBody({ children, layoutID }: Props) {
   return (
     <>
       <motion.div

@@ -1,7 +1,7 @@
 import { getProviders } from "next-auth/react";
 import { Suspense } from "react";
-import { AuthProviderButtons } from "~/components/auth/AuthProviderButtons";
-import ModalBody from "~/components/ui/modal/ModalBody";
+import { AuthProviders } from "~/components/auth/authProviders";
+import ModalBody from "~/components/dialog/dialogBody";
 
 export default async function SignIn() {
   const providers = getProviders();
@@ -16,7 +16,7 @@ export default async function SignIn() {
         </div>
 
         <div className="grid w-full grid-flow-row gap-4 p-4">
-          <AuthProviderButtons providersReturn={providers} />
+          <AuthProviders providersReturn={providers} />
         </div>
       </Suspense>
     </ModalBody>
