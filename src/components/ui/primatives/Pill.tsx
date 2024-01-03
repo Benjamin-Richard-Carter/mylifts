@@ -22,7 +22,7 @@ export const Pill = ({
       onClick={onClick}
       layoutId={layoutID}
       className={twMerge(
-        "flex h-12 w-fit items-center justify-center rounded-full bg-surface-2 p-3",
+        "flex h-12 w-fit items-center justify-center overflow-clip rounded-full",
         layoutMode === "expand" && "w-full",
         layoutMode === "square" && "aspect-square",
       )}

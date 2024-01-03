@@ -7,6 +7,8 @@ import { DndContextWrapper } from "~/components/dnd/dndContext";
 import { Metadata } from "next";
 import { getCutoutValue } from "~/styles/themes";
 import type { PropsWithChildren } from "react";
+import { SessionProvider } from "next-auth/react";
+import { AuthContextProvider } from "~/components/auth/authContextProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,9 +53,11 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         className={`flex h-full flex-col overflow-hidden overscroll-contain bg-background font-sans pr-safe pl-safe`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
-          <ReduxProvider>
-            <DndContextWrapper>{children}</DndContextWrapper>
-          </ReduxProvider>
+          <AuthContextProvider>
+            <ReduxProvider>
+              <DndContextWrapper>{children}</DndContextWrapper>
+            </ReduxProvider>
+          </AuthContextProvider>
         </TRPCReactProvider>
       </body>
     </html>

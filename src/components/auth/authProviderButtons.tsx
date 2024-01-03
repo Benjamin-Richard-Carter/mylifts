@@ -9,7 +9,7 @@ type Props = {
   providersReturn: ProvidersReturn;
 };
 
-export const AuthProviders = ({ providersReturn }: Props) => {
+export const AuthProviderButtons = ({ providersReturn }: Props) => {
   const providers = use(providersReturn);
 
   const logos: Record<string, JSX.Element> = {
