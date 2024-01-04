@@ -7,7 +7,6 @@ import { DndContextWrapper } from "~/components/dnd/dndContext";
 import { Metadata } from "next";
 import { getCutoutValue } from "~/styles/themes";
 import type { PropsWithChildren } from "react";
-import { SessionProvider } from "next-auth/react";
 import { AuthContextProvider } from "~/components/auth/authContextProvider";
 
 const inter = Inter({

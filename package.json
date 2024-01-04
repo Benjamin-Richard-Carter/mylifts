@@ -36,6 +36,7 @@
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.0",
+    "tailwind-variants": "^0.1.20",
     "tailwindcss-safe-area": "^0.4.1",
     "zod": "^3.22.4"
   },

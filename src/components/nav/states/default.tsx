@@ -1,5 +1,5 @@
 "use client";
-import { Logo } from "~/components/ui/primatives/logo";
+import { Logo } from "~/components/ui/Logo";
 
 export const Default = () => {
   return (
