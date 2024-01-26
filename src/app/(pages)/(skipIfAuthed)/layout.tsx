@@ -7,10 +7,6 @@ export default function ProtectedLayout({ children }: PropsWithChildren) {
   const router = useRouter();
   const { status } = useSession();
 
-  // if (status === "loading") {
-  //   return <>loading...</>;
-  // }
-
   if (status === "authenticated") {
     router.push("/home");
   }

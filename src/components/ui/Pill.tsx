@@ -3,6 +3,8 @@ import type { PropsWithChildren } from "react";
 import { motion } from "framer-motion";
 import { tv, type VariantProps } from "tailwind-variants";
 
+export type PillVariants = VariantProps<typeof pillVariants>;
+
 const pillVariants = tv({
   base: "flex h-12 w-fit items-center justify-center overflow-clip",
   variants: {
@@ -39,7 +41,7 @@ export const Pill = ({
   background,
   text,
   onClick,
-}: PropsWithChildren<Props & VariantProps<typeof pillVariants>>) => {
+}: PropsWithChildren<Props & PillVariants>) => {
   const Element = onClick ? motion.button : motion.div;
 
   return (

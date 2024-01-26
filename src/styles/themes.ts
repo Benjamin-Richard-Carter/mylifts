@@ -2,14 +2,14 @@ import { Theme } from "~/types/styles";
 
 export const themes: Record<string, Theme> = {
   dark: {
-    background: "#1F1F1F",
+    background: "#202020",
     cutout: "#161616",
     highlight: "#b85a03",
     warning: "#c93e3e",
 
     surface: {
       1: "#161616",
-      2: "#1F1F1F",
+      2: "#202020",
     },
 
     content: {

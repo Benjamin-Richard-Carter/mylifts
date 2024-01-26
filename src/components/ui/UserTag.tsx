@@ -1,16 +1,19 @@
 "use client";
-import { signOut } from "next-auth/react";
 import { Pill } from "~/components/ui/Pill";
 import { useSession } from "next-auth/react";
 import { ImSpinner3 } from "react-icons/im";
 
-export const UserTag = () => {
+type Props = {
+  onClick?: React.MouseEventHandler;
+};
+
+export const UserTag = ({ onClick }: Props) => {
   const { data: session, status } = useSession();
 
   if (status === "loading" || !session) {
     return (
-      <Pill layoutMode="square" background="secondary" text="primary">
-        <span className="animate-spin text-2xl">
+      <Pill layoutMode="shrink" background="secondary" text="primary">
+        <span className="animate-spin px-10 text-2xl">
           <ImSpinner3 />
         </span>
       </Pill>
@@ -20,9 +23,10 @@ export const UserTag = () => {
   return (
     <Pill
       layoutMode="shrink"
+      layoutID="usertag"
       background="secondary"
       text="primary"
-      onClick={() => signOut()}
+      onClick={onClick}
     >
       <span className="flex h-full flex-row items-center gap-3 p-2 pr-3">
         {session?.user?.image && (

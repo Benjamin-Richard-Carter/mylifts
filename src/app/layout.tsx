@@ -20,7 +20,7 @@ const bebas = Bebas_Neue({
   variable: "--font-display",
 });
 
-const theme = "dark";
+const theme = "light";
 
 export const metadata: Metadata = {
   title: "mylifts",
@@ -35,8 +35,6 @@ export const metadata: Metadata = {
 export function generateViewport({}) {
   return {
     width: "device-width",
-    initialScale: 1,
-    userScalable: false,
     viewportFit: "cover",
     themeColor: getCutoutValue(theme),
   };
