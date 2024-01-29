@@ -11,7 +11,7 @@ export const Settings = () => {
   const router = useRouter();
 
   return (
-    <div className="container flex w-full flex-row items-center justify-between gap-3 p-4 sm:px-0">
+    <div className="container flex w-full flex-row items-center justify-between gap-3">
       <Pill
         layoutMode="square"
         background="secondary"

@@ -7,7 +7,7 @@ export const Home = () => {
   const router = useRouter();
 
   return (
-    <div className="container flex w-full flex-row items-center justify-between gap-3 p-4">
+    <div className="container flex w-full flex-row items-center justify-between gap-3">
       <Logo />
 
       <UserTag onClick={() => router.push("/settings")} />
