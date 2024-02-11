@@ -7,7 +7,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 export type CardVariants = VariantProps<typeof cardVariants>;
 
 const cardVariants = tv({
-  base: "flex w-full overflow-clip bg-surface-1 text-content-1 flex-col",
+  base: "flex w-full overflow-clip bg-surface-1 text-content-1 flex-col border-solid border-2 border-border transition-colors duration-700",
   variants: {
     background: {
       primary: "bg-surface-1",
@@ -74,7 +74,11 @@ export default function Accordion({
           </button>
         </motion.div>
 
-        {isOpen && <motion.div layout="position">{children}</motion.div>}
+        {isOpen && (
+          <motion.div layout="position" className="text-content-2">
+            {children}
+          </motion.div>
+        )}
       </motion.div>
     </>
   );

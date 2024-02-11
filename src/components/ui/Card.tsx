@@ -6,7 +6,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 export type CardVariants = VariantProps<typeof cardVariants>;
 
 const cardVariants = tv({
-  base: "flex w-full overflow-clip bg-surface-1 text-content-1",
+  base: "flex w-full overflow-clip bg-surface-1 text-content-1 border-solid border-2 border-border",
   variants: {
     background: {
       primary: "bg-surface-1",

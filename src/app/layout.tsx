@@ -4,10 +4,11 @@ import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ReduxProvider } from "~/components/redux/reduxProvider";
 import { DndContextWrapper } from "~/components/dnd/dndContext";
-import { Metadata } from "next";
-import { getCutoutValue } from "~/styles/themes";
+import { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { AuthContextProvider } from "~/components/auth/authContextProvider";
+import { getSessionTheme } from "~/utils/theme";
+import { getCutoutValue } from "~/utils/theme";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,8 +21,6 @@ const bebas = Bebas_Neue({
   variable: "--font-display",
 });
 
-const theme = "light";
-
 export const metadata: Metadata = {
   title: "mylifts",
   description: "mylifts - workout tracker",
@@ -32,22 +31,24 @@ export const metadata: Metadata = {
   },
 };
 
-export function generateViewport({}) {
+export async function generateViewport({}): Promise<Viewport> {
   return {
     width: "device-width",
     viewportFit: "cover",
-    themeColor: getCutoutValue(theme),
+    themeColor: getCutoutValue(await getSessionTheme()),
   };
 }
 
 export default async function RootLayout({ children }: PropsWithChildren) {
+  const theme = await getSessionTheme();
+
   return (
     <html
       lang="en"
-      className={`h-full ${inter.variable} ${bebas.variable} ${theme} overscroll-contain`}
+      className={`h-full ${inter.variable} ${bebas.variable} ${theme} overscroll-contain `}
     >
       <body
-        className={`flex h-full flex-col overflow-hidden overscroll-contain bg-background font-sans pr-safe pl-safe`}
+        className={`flex h-full flex-col overflow-hidden overscroll-contain bg-background font-sans	transition-colors duration-700 pr-safe pl-safe	`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <AuthContextProvider>

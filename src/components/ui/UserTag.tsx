@@ -10,6 +10,8 @@ type Props = {
 export const UserTag = ({ onClick }: Props) => {
   const { data: session, status } = useSession();
 
+  console.log(session);
+
   if (status === "loading" || !session) {
     return (
       <Pill layoutMode="shrink" background="secondary" text="primary">

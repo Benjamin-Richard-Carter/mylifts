@@ -6,7 +6,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 export type PillVariants = VariantProps<typeof pillVariants>;
 
 const pillVariants = tv({
-  base: "flex h-12 w-fit items-center justify-center overflow-clip",
+  base: "flex h-12 w-fit items-center justify-center overflow-clip border-solid border-2 border-border transition-colors duration-700",
   variants: {
     background: {
       primary: "bg-surface-1",

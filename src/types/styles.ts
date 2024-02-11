@@ -5,4 +5,5 @@ export type Theme = {
   surface: Record<number, string>;
   content: Record<number, string>;
   warning: string;
+  border: string;
 };

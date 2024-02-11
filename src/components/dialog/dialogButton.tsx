@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 type Props = {
-  onClick: React.MouseEventHandler;
+  onClick?: React.MouseEventHandler;
   icon?: JSX.Element;
   label: string;
 };
