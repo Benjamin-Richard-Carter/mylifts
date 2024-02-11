@@ -1,15 +1,12 @@
-"use client";
-import { useSession } from "next-auth/react";
 import type { PropsWithChildren } from "react";
-import { useRouter } from "next/navigation";
+import { auth } from "~/auth";
+import { redirect } from "next/navigation";
 
-export default function ProtectedLayout({ children }: PropsWithChildren) {
-  const router = useRouter();
-  const { status } = useSession();
+export default async function SkipIfAuthed({ children }: PropsWithChildren) {
+  const session = await auth();
 
-  if (status === "authenticated") {
-    router.push("/home");
+  if (session) {
+    redirect("/home");
   }
-
   return <>{children}</>;
 }
