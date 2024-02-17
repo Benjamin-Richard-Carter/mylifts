@@ -5,11 +5,18 @@ import Github from "next-auth/providers/github";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import NextAuth from "next-auth";
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, User } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
     theme: string;
+    user: {} & User;
+  }
+}
+
+declare module "@auth/core/adapters" {
+  interface AdapterSession {
+    provider?: string;
   }
 }
 
@@ -36,13 +43,15 @@ export const authConfig: NextAuthConfig = {
 
   callbacks: {
     async session({ session, trigger, newSession }) {
+      const { sessionToken, ...clientSafeSession } = session;
+
       if (trigger === "update" && adapter.updateSession && newSession) {
         await adapter.updateSession({
-          sessionToken: session.sessionToken,
+          sessionToken: sessionToken,
           ...newSession,
         });
       }
-      const { sessionToken, ...clientSafeSession } = session;
+
       return clientSafeSession;
     },
   },

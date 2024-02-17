@@ -1,44 +1,87 @@
 "use client";
 import { Pill } from "~/components/ui/Pill";
+import PopupMenu from "./Popup";
 import { useSession } from "next-auth/react";
-import { ImSpinner3 } from "react-icons/im";
+import { motion } from "framer-motion";
+import { TbLogout2, TbEdit, TbSettings } from "react-icons/tb";
+import { signOut } from "next-auth/react";
+import { UserTagV2 } from "./UserTagV2";
 
-type Props = {
-  onClick?: React.MouseEventHandler;
-};
-
-export const UserTag = ({ onClick }: Props) => {
-  const { data: session, status } = useSession();
-
-  console.log(session);
-
-  if (status === "loading" || !session) {
-    return (
-      <Pill layoutMode="shrink" background="secondary" text="primary">
-        <span className="animate-spin px-10 text-2xl">
-          <ImSpinner3 />
-        </span>
-      </Pill>
-    );
-  }
+export const UserTag = () => {
+  const { data: session } = useSession();
 
   return (
-    <Pill
-      layoutMode="shrink"
-      layoutID="usertag"
-      background="secondary"
-      text="primary"
-      onClick={onClick}
-    >
-      <span className="flex h-full flex-row items-center gap-3 p-2 pr-3">
-        {session?.user?.image && (
-          <img
-            src={session?.user?.image}
-            className="aspect-square h-full rounded-full"
-          />
-        )}
-        {session?.user?.name}
-      </span>
-    </Pill>
+    <PopupMenu
+      id="userMenu"
+      key="oiklh"
+      initial={<UserTagV2 />}
+      expanded={
+        <motion.div
+          className="flex w-fit flex-col overflow-clip bg-surface-1 p-2"
+          style={{ borderRadius: "20px" }}
+          layoutId="user-menu"
+          key="user-menu"
+        >
+          <motion.div className="flex flex-col items-center justify-center gap-3 p-4 text-content-2">
+            {session && (
+              <motion.img
+                src={session.user.image || undefined}
+                className="aspect-square h-20 rounded-full"
+                layoutId="user-image"
+                key="user-image"
+                referrerPolicy="no-referrer"
+              />
+            )}
+
+            <motion.div className="flex flex-col gap-1 text-center">
+              <motion.p
+                className="text-xl text-content-1"
+                layoutId="user-nametag"
+              >
+                {session?.user?.name}
+              </motion.p>
+              <motion.p className="text-sm text-content-3">
+                {session?.user?.email}
+              </motion.p>
+            </motion.div>
+          </motion.div>
+
+          <motion.div className="flex flex-row items-center justify-center gap-5  p-3">
+            <div className="flex w-fit flex-col items-center gap-2">
+              <Pill
+                layoutMode="square"
+                background="secondary"
+                onClick={() => signOut()}
+              >
+                <span className="text-2xl text-content-2">
+                  <TbLogout2 />
+                </span>
+              </Pill>
+              <p className="text-xs font-semibold text-content-3">Sign out</p>
+            </div>
+
+            <div className="flex w-fit flex-col items-center gap-2">
+              <Pill layoutMode="square" background="secondary">
+                <span className="text-2xl text-content-2">
+                  <TbEdit />
+                </span>
+              </Pill>
+
+              <p className="text-xs font-semibold text-content-3">Profile</p>
+            </div>
+
+            <div className="flex w-fit flex-col items-center gap-2">
+              <Pill layoutMode="square" background="secondary">
+                <span className="text-2xl text-content-2">
+                  <TbSettings />
+                </span>
+              </Pill>
+
+              <p className="text-xs font-semibold text-content-3">Settings</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      }
+    />
   );
 };

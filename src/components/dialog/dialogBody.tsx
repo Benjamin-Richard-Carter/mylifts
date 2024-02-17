@@ -13,9 +13,12 @@ export default function DialogBody({
   return (
     <>
       <motion.div
-        className="flex w-full flex-col items-center justify-center overflow-clip rounded-3xl bg-surface-1 shadow-sm"
+        className="flex w-60 max-w-xs flex-col items-center justify-center overflow-clip rounded-3xl bg-surface-1 shadow-3xl outline outline-2 outline-border"
         layoutId={layoutID}
-        layout="position"
+        transition={{
+          type: "spring",
+          duration: 0.5,
+        }}
       >
         {children}
       </motion.div>

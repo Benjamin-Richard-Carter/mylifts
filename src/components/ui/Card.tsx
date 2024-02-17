@@ -1,57 +1,30 @@
 "use client";
 import { motion } from "framer-motion";
-import type { PropsWithChildren } from "react";
+import type { ReactNode } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
-export type CardVariants = VariantProps<typeof cardVariants>;
-
 const cardVariants = tv({
-  base: "flex w-full overflow-clip bg-surface-1 text-content-1 border-solid border-2 border-border",
-  variants: {
-    background: {
-      primary: "bg-surface-1",
-      secondary: "bg-surface-2",
-      tertiary: "bg-surface-3",
-      highlight: "bg-highlight",
-    },
-
-    text: {
-      primary: "text-content-1",
-      secondary: "text-content-2",
-      tertiary: "text-content-3",
-    },
-
-    rounded: {
-      1: "rounded-sm",
-      2: "rounded-md",
-      3: "rounded-lg",
-      4: "rounded-xl",
-      5: "rounded-2xl",
-      6: "rounded-3xl",
-      7: "rounded-full",
-    },
-  },
+  base: "w-full bg-surface-1 text-content-1 border-solid border-2 border-border p-2 rounded-2xl",
+  variants: {},
 });
 
 type Props = {
   layoutID?: string;
+  className?: string;
+  variants?: VariantProps<typeof cardVariants>;
+  children?: ReactNode | undefined;
 };
 
 export default function Card({
-  children,
   layoutID,
-  background,
-  text,
-  rounded,
-}: PropsWithChildren<Props & CardVariants>) {
+  children,
+  variants,
+  className,
+}: Props) {
   return (
     <>
       <motion.div
-        className={cardVariants({
-          background,
-          text,
-          rounded,
-        })}
+        className={cardVariants({ ...variants, className })}
         layoutId={layoutID}
         layout="position"
       >

@@ -24,17 +24,6 @@ export const Settings = () => {
       </Pill>
 
       <UserTag />
-
-      <Pill
-        layoutMode="square"
-        background="secondary"
-        text="primary"
-        onClick={() => signOut()}
-      >
-        <span className="text-2xl">
-          <TbLogout2 />
-        </span>
-      </Pill>
     </div>
   );
 };

@@ -33,6 +33,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   theme        String   @default("default")
+  provider     String?
 }
 
 model User {
@@ -41,8 +42,6 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  theme        String   @default("default")
-
   accounts      Account[]
   Routine       Routine[]
   sessions      Session[]
