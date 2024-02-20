@@ -31,9 +31,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   theme        String   @default("default")
   provider     String?
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -43,9 +43,8 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  Routine       Routine[]
   sessions      Session[]
-  Workout       Workout[]
+  workouts      Workout[]
 }
 
 model VerificationToken {
@@ -68,51 +67,76 @@ model Exercise {
   category          categorytype
   instructions      String[]
   tsVector          Unsupported("tsvector")? @default(dbgenerated("setweight(to_tsvector('english'::regconfig, COALESCE(name, ''::text)), 'A'::\"char\")"))
-  ExerciseLine      ExerciseLine[]
+  sets              Set[]
 
   @@index([tsVector], map: "excerise_tsVector_idx", type: Gin)
   @@index([name(ops: raw("gist_trgm_ops"))], map: "exercise_trgm_idx", type: Gist)
 }
 
-model ExerciseLine {
-  id         String   @id
-  exerciseId String
-  workoutId  String?
-  routineId  String?
-  index      Int
-  Exercise   Exercise @relation(fields: [exerciseId], references: [id])
-  Routine    Routine? @relation(fields: [routineId], references: [id], onDelete: Cascade)
-  Workout    Workout? @relation(fields: [workoutId], references: [id], onDelete: Cascade)
-  Set        Set[]
-}
-
-model Routine {
-  id           String         @id
-  description  String?
-  title        String
-  userId       String
-  created      DateTime       @default(now())
-  userCreated  Boolean        @default(true)
-  ExerciseLine ExerciseLine[]
-  User         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Workout {
+  id        String   @id
+  title     String
+  userId    String
+  created   DateTime @default(now())
+  completed Boolean? @default(false)
+  sets      Set[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Set {
-  id             String       @id
-  reps           Int
-  weight         Int
-  exerciseLineId String
-  ExerciseLine   ExerciseLine @relation(fields: [exerciseLineId], references: [id], onDelete: Cascade)
+  id             String         @id
+  exerciseId     String
+  index          Int
+  routineId      String?
+  workoutId      String?
+  exercise       Exercise       @relation(fields: [exerciseId], references: [id])
+  workout        Workout?       @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exertion       Exertion?
+  resistence     Resistence?
 }
 
-model Workout {
-  id           String         @id
-  title        String
-  userId       String
-  created      DateTime       @default(now())
-  completed    Boolean        @default(false)
-  ExerciseLine ExerciseLine[]
-  User         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Exertion {
+  id         String       @id
+  set        Set          @relation(fields: [setId], references: [id])
+  setId      String       @unique
+  type       exertiontype
+  value      String
+  unit       distanceunit?
+}
+
+model Resistence {
+  id         String       @id
+  set        Set          @relation(fields: [setId], references: [id])
+  setId      String       @unique
+  type       resistencetype
+  value      String
+  unit       weightunit?
+}
+
+enum resistencetype {
+  weight
+  machine_setting @map("machine setting")
+  body_weight     @map("body weight")
+  band
+}
+
+enum exertiontype {
+  time
+  reps
+  distance_travelled @map("distance travelled")
+  heart_rate         @map("heart rate")
+  calories_burned    @map("calories burned")
+  power_output       @map("power output")
+}
+
+enum weightunit {
+  lbs
+  kg
+}
+
+enum distanceunit {
+  miles
+  km
 }
 
 enum categorytype {
@@ -176,3 +200,4 @@ enum muscle {
   neck
   abductors
 }
+

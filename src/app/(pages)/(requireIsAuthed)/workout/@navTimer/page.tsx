@@ -1,8 +1,6 @@
 import { UserTag } from "~/components/ui/UserTag";
 import { SettingsMenu } from "~/components/ui/SettingsMenu";
 import { SessionMenu } from "~/components/ui/SessionMenu";
-import { Pill } from "~/components/ui/Pill";
-import { TbBell, TbPlus } from "react-icons/tb";
 
 export default function Page() {
   return (
@@ -10,14 +8,8 @@ export default function Page() {
       <UserTag />
 
       <div className="flex gap-2 ">
-        <Pill
-          layoutMode="square"
-          background="secondary"
-          text="secondary"
-          className="text-2xl"
-          //onClick={() => router.push("/home")}
-          children={<TbBell />}
-        />
+        <SessionMenu />
+        <SettingsMenu />
       </div>
     </div>
   );

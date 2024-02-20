@@ -6,7 +6,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 export type PillVariants = VariantProps<typeof pillVariants>;
 
 const pillVariants = tv({
-  base: "flex h-12 w-fit items-center justify-center overflow-clip border-solid border-2 border-border transition-colors duration-700 bg-surface-1",
+  base: "flex h-12 items-center justify-center overflow-clip transition-colors duration-700 bg-surface-1",
   variants: {
     background: {
       primary: "bg-surface-1",
@@ -24,13 +24,14 @@ const pillVariants = tv({
     layoutMode: {
       expand: "w-full",
       shrink: "w-fit",
-      square: "aspect-square",
+      square: "aspect-square shrink-0	",
     },
   },
 });
 
 type Props = {
   layoutID?: string;
+  className?: string;
   onClick?: React.MouseEventHandler;
 };
 
@@ -40,6 +41,7 @@ export const Pill = ({
   layoutMode,
   background,
   text,
+  className,
   onClick,
 }: PropsWithChildren<Props & PillVariants>) => {
   const Element = onClick ? motion.button : motion.div;
@@ -52,6 +54,7 @@ export const Pill = ({
         layoutMode,
         background,
         text,
+        className,
       })}
       style={{ borderRadius: "50px" }}
     >

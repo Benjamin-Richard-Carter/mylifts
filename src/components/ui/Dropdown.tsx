@@ -36,40 +36,38 @@ export default function DropdownMenu({ expanded, initial }: Props) {
   }
 
   return (
-    <LayoutGroup>
-      <motion.div
-        onClick={() => setIsOpen(true)}
-        key="triggerbutton"
-        className="relative"
-      >
-        {initial}
+    <motion.div
+      onClick={() => setIsOpen(true)}
+      key="triggerbutton"
+      className="relative"
+    >
+      {initial}
 
-        <AnimatePresence mode="wait">
-          {isOpen && (
-            <motion.div
-              className="absolute mt-5 h-fit rounded-xl bg-surface-1"
-              style={{
-                translateX: "-50%",
-                left: "50%",
-                top: "100%",
-                transformOrigin: "top center",
-                boxShadow: "0px 0px 20px 5px rgba(0,0,0,0.05)",
-              }}
-              ref={clickRef}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{
-                scale: 1,
-                opacity: inView ? 1 : 0,
-              }}
-              exit={{ scale: 0, opacity: 0 }}
-              transition={{ duration: 0, type: "spring" }}
-              key="menu"
-            >
-              <span ref={ref}>{expanded}</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </LayoutGroup>
+      <AnimatePresence mode="wait">
+        {isOpen && (
+          <motion.div
+            className="absolute mt-5 h-fit rounded-xl bg-surface-1"
+            style={{
+              translateX: "-50%",
+              left: "50%",
+              top: "100%",
+              transformOrigin: "top center",
+              boxShadow: "0px 0px 20px 5px rgba(0,0,0,0.05)",
+            }}
+            ref={clickRef}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale: 1,
+              opacity: inView ? 1 : 0,
+            }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0, type: "spring" }}
+            key="menu"
+          >
+            <span ref={ref}>{expanded}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
