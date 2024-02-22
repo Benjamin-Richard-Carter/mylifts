@@ -5,7 +5,6 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { db } from "~/server/db";
 
 export const postRouter = createTRPCRouter({
   sync: protectedProcedure

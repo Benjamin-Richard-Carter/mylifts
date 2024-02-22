@@ -74,7 +74,7 @@ model Exercise {
 }
 
 model Workout {
-  id        String   @id
+  id        String   @id @unique @default(cuid())
   title     String
   userId    String
   created   DateTime @default(now())
@@ -84,10 +84,10 @@ model Workout {
 }
 
 model Set {
-  id             String         @id
+  id             String         @id @unique @default(cuid())
   exerciseId     String
   index          Int
-  workoutId      String?
+  workoutId      String
   exercise       Exercise       @relation(fields: [exerciseId], references: [id])
   workout        Workout?       @relation(fields: [workoutId], references: [id], onDelete: Cascade)
   exertion       Exertion[]
@@ -95,7 +95,7 @@ model Set {
 }
 
 model Exertion {
-  id         String       @id
+  id         String       @id @unique @default(cuid())
   setId      String
   set        Set          @relation(fields: [setId], references: [id], onDelete: Cascade)
   type       exertiontype
@@ -104,7 +104,7 @@ model Exertion {
 }
 
 model Resistence {
-  id         String       @id
+  id         String       @id @unique @default(cuid())
   setId      String
   set        Set          @relation(fields: [setId], references: [id], onDelete: Cascade)
   type       resistencetype
