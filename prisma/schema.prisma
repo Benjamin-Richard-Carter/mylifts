@@ -87,37 +87,29 @@ model Set {
   id             String         @id
   exerciseId     String
   index          Int
-  routineId      String?
   workoutId      String?
   exercise       Exercise       @relation(fields: [exerciseId], references: [id])
   workout        Workout?       @relation(fields: [workoutId], references: [id], onDelete: Cascade)
-  exertion       Exertion?
-  resistence     Resistence?
+  exertion       Exertion[]
+  resistence     Resistence[]
 }
 
 model Exertion {
   id         String       @id
-  set        Set          @relation(fields: [setId], references: [id])
-  setId      String       @unique
+  setId      String
+  set        Set          @relation(fields: [setId], references: [id], onDelete: Cascade)
   type       exertiontype
   value      String
-  unit       distanceunit?
+  unit       exertionunit?
 }
 
 model Resistence {
   id         String       @id
-  set        Set          @relation(fields: [setId], references: [id])
-  setId      String       @unique
+  setId      String
+  set        Set          @relation(fields: [setId], references: [id], onDelete: Cascade)
   type       resistencetype
   value      String
-  unit       weightunit?
-}
-
-enum resistencetype {
-  weight
-  machine_setting @map("machine setting")
-  body_weight     @map("body weight")
-  band
+  unit       resistenceunit?
 }
 
 enum exertiontype {
@@ -129,14 +121,27 @@ enum exertiontype {
   power_output       @map("power output")
 }
 
-enum weightunit {
-  lbs
-  kg
+enum resistencetype {
+  weight
+  machine_setting @map("machine setting")
+  body_weight     @map("body weight")
+  band
+  incline    
 }
 
-enum distanceunit {
+enum exertionunit {
   miles
   km
+  seconds
+  bpm
+  kcal
+  watts
+}
+
+enum resistenceunit {
+  lbs
+  kg
+  degrees
 }
 
 enum categorytype {

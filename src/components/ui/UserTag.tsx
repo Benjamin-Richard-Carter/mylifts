@@ -53,7 +53,7 @@ export const UserTag = () => {
                 background="secondary"
                 onClick={() => signOut()}
               >
-                <span className="text-2xl text-content-2">
+                <span className="text-2xl text-content-3">
                   <TbLogout2 />
                 </span>
               </Pill>
@@ -62,7 +62,7 @@ export const UserTag = () => {
 
             <div className="flex w-fit flex-col items-center gap-2">
               <Pill layoutMode="square" background="secondary">
-                <span className="text-2xl text-content-2">
+                <span className="text-2xl text-content-3">
                   <TbEdit />
                 </span>
               </Pill>
@@ -72,7 +72,7 @@ export const UserTag = () => {
 
             <div className="flex w-fit flex-col items-center gap-2">
               <Pill layoutMode="square" background="secondary">
-                <span className="text-2xl text-content-2">
+                <span className="text-2xl text-content-3">
                   <TbSettings />
                 </span>
               </Pill>

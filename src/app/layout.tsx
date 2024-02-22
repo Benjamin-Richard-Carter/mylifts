@@ -2,7 +2,6 @@ import "~/styles/globals.css";
 import { Inter, Bebas_Neue } from "next/font/google";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
-import { ReduxProvider } from "~/components/redux/reduxProvider";
 import { DndContextWrapper } from "~/components/dnd/dndContext";
 import { Metadata, Viewport } from "next";
 import { AuthContextProvider } from "~/components/auth/authContextProvider";
@@ -56,9 +55,7 @@ export default async function RootLayout({ children }: Props) {
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <AuthContextProvider>
-            <ReduxProvider>
-              <DndContextWrapper>{children}</DndContextWrapper>
-            </ReduxProvider>
+            <DndContextWrapper>{children}</DndContextWrapper>
           </AuthContextProvider>
         </TRPCReactProvider>
       </body>
