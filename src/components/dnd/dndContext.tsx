@@ -14,6 +14,7 @@ import {
   UseDraggableReturn,
   UseSortableReturn,
 } from "~/types/dnd";
+import { closestCenterWithIntersection } from "~/utils/dnd";
 
 export const DroppableCTX = createContext<useDroppableReturn | null>(null);
 export const DraggableCTX = createContext<UseDraggableReturn | null>(null);
@@ -35,5 +36,12 @@ export const DndContextWrapper = ({ children }: PropsWithChildren) => {
     }),
   );
 
-  return <DndContext sensors={DNDsensors}>{children}</DndContext>;
+  return (
+    <DndContext
+      sensors={DNDsensors}
+      collisionDetection={closestCenterWithIntersection}
+    >
+      {children}
+    </DndContext>
+  );
 };

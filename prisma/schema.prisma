@@ -79,37 +79,46 @@ model Workout {
   userId    String
   created   DateTime @default(now())
   completed Boolean? @default(false)
+  setGroups SetGroup[]
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SetGroup {
+  id        String   @id @unique @default(cuid())
+  workoutId String
   sets      Set[]
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout   Workout? @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  index     String
 }
 
 model Set {
-  id             String         @id @unique @default(cuid())
-  exerciseId     String
-  index          Int
-  workoutId      String
-  exercise       Exercise       @relation(fields: [exerciseId], references: [id])
-  workout        Workout?       @relation(fields: [workoutId], references: [id], onDelete: Cascade)
-  exertion       Exertion[]
-  resistence     Resistence[]
+  id         String       @id @unique @default(cuid())
+  exerciseId String
+  workoutId  String
+  setGroupId String
+  setGroup   SetGroup    @relation(fields: [setGroupId], references: [id], onDelete: Cascade)
+  exercise   Exercise     @relation(fields: [exerciseId], references: [id])
+  exertion   Exertion[]
+  resistence Resistence[]
+  index      String
 }
 
 model Exertion {
-  id         String       @id @unique @default(cuid())
-  setId      String
-  set        Set          @relation(fields: [setId], references: [id], onDelete: Cascade)
-  type       exertiontype
-  value      String
-  unit       exertionunit?
+  id    String        @id @unique @default(cuid())
+  setId String
+  set   Set           @relation(fields: [setId], references: [id], onDelete: Cascade)
+  type  exertiontype
+  value String
+  unit  exertionunit?
 }
 
 model Resistence {
-  id         String       @id @unique @default(cuid())
-  setId      String
-  set        Set          @relation(fields: [setId], references: [id], onDelete: Cascade)
-  type       resistencetype
-  value      String
-  unit       resistenceunit?
+  id    String          @id @unique @default(cuid())
+  setId String
+  set   Set             @relation(fields: [setId], references: [id], onDelete: Cascade)
+  type  resistencetype
+  value String
+  unit  resistenceunit?
 }
 
 enum exertiontype {
@@ -126,7 +135,7 @@ enum resistencetype {
   machine_setting @map("machine setting")
   body_weight     @map("body weight")
   band
-  incline    
+  incline
 }
 
 enum exertionunit {
@@ -205,4 +214,3 @@ enum muscle {
   neck
   abductors
 }
-

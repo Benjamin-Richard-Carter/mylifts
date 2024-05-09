@@ -55,10 +55,10 @@ export default function DropdownMenu({ expanded, initial }: Props) {
               boxShadow: "0px 0px 20px 5px rgba(0,0,0,0.05)",
             }}
             ref={clickRef}
-            initial={{ scale: 0, opacity: 0 }}
+            initial={{ scale: 0, opacity: 1 }}
             animate={{
               scale: 1,
-              opacity: inView ? 1 : 0,
+              //opacity: inView ? 1 : 0,
             }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0, type: "spring" }}

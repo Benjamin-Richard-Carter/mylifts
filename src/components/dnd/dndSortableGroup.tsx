@@ -1,54 +1,63 @@
 "use client";
-import { useDndMonitor } from "@dnd-kit/core";
-import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { Collision, useDndMonitor } from "@dnd-kit/core";
+import { SortableContext } from "@dnd-kit/sortable";
 import { DndSortableWrapper } from "./dndSortable";
 import { SortableItem } from "~/types/dnd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DndPresentational } from "./dndPresentational";
+import { LayoutGroup } from "framer-motion";
+import { reorderItems, useDndIntersectionMonitor } from "~/utils/dnd";
 
 type Props = {
   items: SortableItem[];
   opacityOnDrag?: number;
-  setItems: React.Dispatch<React.SetStateAction<Props["items"]>>;
+  receiveNewList: (newList: SortableItem[]) => void;
 };
 
-export const DndSortableGroup = ({ items, setItems, opacityOnDrag }: Props) => {
-  const [activeID, setActiveID] = useState<string | null>(null);
+export const DndSortableGroup = (props: Props) => {
+  const { items, opacityOnDrag, receiveNewList } = props;
+  const [activeID, setActiveId] = useState<string | null>(null);
   const activeItem = items.find((item) => item.params.id === activeID);
-  const itemIDs = items.map((item) => item.params.id);
+  const itemIDs = useMemo(() => items.map((item) => item.params.id), [items]);
 
-  useDndMonitor({
+  useDndIntersectionMonitor({
+    holdOverTime: 750,
+    holdOverThreshold: 0.2,
+
     onDragStart({ active }) {
-      setActiveID(active.id as string);
+      setActiveId(active.id as string);
     },
 
     onDragMove({ active, over }) {
-      const itemIDs = items.map((item) => item.params.id);
+      receiveNewList(reorderItems(items, active, over));
+    },
 
-      if (itemIDs.includes(over?.id as string)) {
-        const activeId = itemIDs.indexOf(active.id as string);
-        const overIdx = items.findIndex((item) => item.params.id === over?.id);
-        const newSets = arrayMove(items, activeId, overIdx);
-        setItems(newSets);
-      }
+    onDragHoldover({ active, over }) {
+      console.log("Holdover", active, over);
+    },
+
+    onDragEnd() {
+      setActiveId(null);
     },
   });
 
   return (
-    <>
+    <LayoutGroup>
+      {JSON.stringify(itemIDs)}
       <SortableContext items={itemIDs}>
         {items.map((item) => (
-          <DndSortableWrapper
-            params={item.params}
-            key={item.params.id}
-            opacityOnDrag={opacityOnDrag}
-          >
-            {item.element}
-          </DndSortableWrapper>
+          <>
+            <DndSortableWrapper
+              params={item.params}
+              key={item.params.id}
+              opacityOnDrag={opacityOnDrag}
+            >
+              {item.element}
+            </DndSortableWrapper>
+          </>
         ))}
       </SortableContext>
-
       <DndPresentational>{activeItem?.element}</DndPresentational>
-    </>
+    </LayoutGroup>
   );
 };

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { TbLogout2, TbEdit, TbSettings } from "react-icons/tb";
 import { signOut } from "next-auth/react";
 import { UserTagV2 } from "./UserTagV2";
+import DropdownMenu from "./Dropdown";
 
 export const UserTag = () => {
   const { data: session } = useSession();

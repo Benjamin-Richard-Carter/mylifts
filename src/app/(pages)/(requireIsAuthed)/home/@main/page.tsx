@@ -1,6 +1,4 @@
 import { UserTag } from "~/components/ui/UserTag";
-import { SettingsMenu } from "~/components/ui/SettingsMenu";
-import { SessionMenu } from "~/components/ui/SessionMenu";
 import { Pill } from "~/components/ui/Pill";
 import { TbBell, TbPlus } from "react-icons/tb";
 
