@@ -34,27 +34,21 @@ export const useDndIntersectionMonitor = ({
 
   const intersectionCheck = (event: DragMoveEvent) => {
     const { active, over, collisions } = event;
-
     if (!collisions || !over || active.id === over.id) {
       return;
     }
-
     const intersectionRatio = collisions[0]?.data?.intersectionRatio;
-
     if (intersectionRatio >= holdOverThreshold && !overTimeout) {
       const id = setTimeout(() => {
         onDragHoldover?.(event);
       }, holdOverTime);
       setOverTimeout(id);
     }
-
     if (intersectionRatio < holdOverThreshold && overTimeout) {
       intersectionCleanup();
     }
-
     return intersectionRatio > 0;
   };
-
   const intersectionCleanup = () => {
     if (overTimeout) {
       clearTimeout(overTimeout);
@@ -64,14 +58,12 @@ export const useDndIntersectionMonitor = ({
 
   useDndMonitor({
     ...handlers,
-
     onDragMove(event) {
       const blocking = intersectionCheck(event);
       if (!blocking) {
         onDragMove?.(event);
       }
     },
-
     onDragEnd(event) {
       intersectionCleanup();
       onDragEnd?.(event);
@@ -82,19 +74,6 @@ export const useDndIntersectionMonitor = ({
 ////////////////////////////////////////
 // DND Utility functions ///////////////
 ////////////////////////////////////////
-
-export const isDeltaInBounds = (
-  initial: ClientRect | null,
-  current: ClientRect | null,
-  threshold: number,
-) => {
-  if (!initial || !current) {
-    return false;
-  }
-  const deltaX = Math.abs(initial.left - current.left);
-  const deltaY = Math.abs(initial.top - current.top);
-  return deltaX < threshold && deltaY < threshold;
-};
 
 export const reorderItems = (
   items: SortableItem[],
@@ -153,9 +132,18 @@ export function sortCollisionsAsc(
   return a - b;
 }
 
-////////////////////////////////////////
-// Collision Detection Algorithm ///////
-////////////////////////////////////////
+export const isDeltaInBounds = (
+  initial: ClientRect | null,
+  current: ClientRect | null,
+  threshold: number,
+) => {
+  if (!initial || !current) {
+    return false;
+  }
+  const deltaX = Math.abs(initial.left - current.left);
+  const deltaY = Math.abs(initial.top - current.top);
+  return deltaX < threshold && deltaY < threshold;
+};
 
 export const closestCenterWithIntersection: CollisionDetection = ({
   collisionRect,
