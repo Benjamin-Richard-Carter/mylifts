@@ -2,12 +2,14 @@ import type {
   Coordinates,
   ClientRect,
   DragMoveEvent,
+  DragEndEvent,
+  DragStartEvent,
 } from "@dnd-kit/core/dist/types";
 import type {
   CollisionDescriptor,
   CollisionDetection,
 } from "@dnd-kit/core/dist/utilities/algorithms/types";
-import { SortableItem } from "~/types/dnd";
+import { DraggableItem, SortableItem } from "~/types/dnd";
 import { Active, DndMonitorListener, Over, useDndMonitor } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
@@ -34,10 +36,12 @@ export const useDndIntersectionMonitor = ({
 
   const intersectionCheck = (event: DragMoveEvent) => {
     const { active, over, collisions } = event;
+
     if (!collisions || !over || active.id === over.id) {
       return;
     }
     const intersectionRatio = collisions[0]?.data?.intersectionRatio;
+
     if (intersectionRatio >= holdOverThreshold && !overTimeout) {
       const id = setTimeout(() => {
         onDragHoldover?.(event);
@@ -49,6 +53,7 @@ export const useDndIntersectionMonitor = ({
     }
     return intersectionRatio > 0;
   };
+
   const intersectionCleanup = () => {
     if (overTimeout) {
       clearTimeout(overTimeout);
@@ -60,6 +65,7 @@ export const useDndIntersectionMonitor = ({
     ...handlers,
     onDragMove(event) {
       const blocking = intersectionCheck(event);
+
       if (!blocking) {
         onDragMove?.(event);
       }
@@ -93,28 +99,56 @@ export const reorderItems = (
 
 function getCenterOfRectangle(rect: ClientRect): Coordinates {
   return {
-    x: rect.left + rect.width * 0.5,
-    y: rect.top + rect.height * 0.5,
+    x: rect.left + (rect.right - rect.left) * 0.5,
+    y: rect.top + (rect.bottom - rect.top) * 0.5,
   };
 }
 
+export const getEventRects = (
+  event: DragMoveEvent | DragEndEvent | DragStartEvent | null,
+) => {
+  if (!event) {
+    return [null, null];
+  }
+  const { initial, translated } = event.active.rect.current;
+  return [initial, translated];
+};
+
 export function distanceBetween(p1: Coordinates, p2: Coordinates) {
   return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+}
+
+export function getRectTransform(
+  entry: ClientRect | null | undefined,
+  target: ClientRect | null | undefined,
+): string {
+  if (!entry || !target) {
+    return "none";
+  }
+
+  const x = target.left - entry.left;
+  const y = target.top - entry.top;
+
+  return `translate3d(${x}px, ${y}px, 0)`;
 }
 
 export function getIntersectionRatio(
   entry: ClientRect,
   target: ClientRect,
 ): number {
+  const targetWidth = target.right - target.left;
+  const targetHeight = target.bottom - target.top;
+
   const top = Math.max(target.top, entry.top);
   const left = Math.max(target.left, entry.left);
-  const right = Math.min(target.left + target.width, entry.left + entry.width);
-  const bottom = Math.min(target.top + target.height, entry.top + entry.height);
+  const right = Math.min(target.left + targetWidth, entry.left + entry.width);
+  const bottom = Math.min(target.top + targetHeight, entry.top + entry.height);
+
   const width = right - left;
   const height = bottom - top;
 
   if (left < right && top < bottom) {
-    const targetArea = target.width * target.height;
+    const targetArea = targetWidth * targetHeight;
     const entryArea = entry.width * entry.height;
     const intersectionArea = width * height;
     const intersectionRatio =

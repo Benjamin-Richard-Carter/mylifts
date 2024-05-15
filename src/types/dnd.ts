@@ -11,10 +11,8 @@ export type UseSortableReturn = ReturnType<typeof useSortable>;
 
 export type DraggableItem = {
   params: UseDraggableArguments;
-  element: React.ReactNode;
 };
 
 export type SortableItem = {
   params: UseSortableArguments;
-  element: React.ReactNode;
 };

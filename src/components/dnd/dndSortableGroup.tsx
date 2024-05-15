@@ -1,56 +1,47 @@
 "use client";
-import { SortableContext } from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { DndSortableWrapper } from "./dndSortable";
-import { SortableItem } from "~/types/dnd";
+import { DraggableItem, SortableItem } from "~/types/dnd";
 import { useMemo, useState } from "react";
 import { DndPresentational } from "./dndPresentational";
-import { reorderItems, useDndIntersectionMonitor } from "~/utils/dnd";
+import { LayoutGroup, motion } from "framer-motion";
+import { UniqueIdentifier } from "@dnd-kit/core";
+import { DndDraggableWrapper } from "./dndDraggable";
 
 type Props = {
   items: SortableItem[];
-  receiveNewList: (newList: SortableItem[]) => void;
   render: any;
 };
 
-export const DndSortableGroup = (props: Props) => {
-  const { items, receiveNewList } = props;
-  const [activeID, setActiveId] = useState<string | null>(null);
+export const DndSortableGroup = ({ items, render }: Props) => {
   const itemIDs = useMemo(() => items.map((item) => item.params.id), [items]);
+  const [hidden, setHidden] = useState<UniqueIdentifier | null>(null);
 
-  useDndIntersectionMonitor({
-    holdOverTime: 750,
-    holdOverThreshold: 0.2,
-
-    onDragStart({ active }) {
-      setActiveId(active.id as string);
-    },
-
-    onDragMove({ active, over }) {
-      receiveNewList(reorderItems(items, active, over));
-    },
-
-    onDragHoldover({ active, over }) {
-      console.log("Holdover", active, over);
-    },
-
-    onDragEnd() {
-      setActiveId(null);
-    },
-  });
+  const transition = {
+    type: "spring",
+    duration: 0.2,
+  };
 
   return (
-    <>
+    <LayoutGroup>
       <SortableContext items={itemIDs}>
         {items.map((item) => (
-          <DndSortableWrapper
-            params={item.params}
+          <motion.div
+            layout
             key={item.params.id}
-            render={props.render}
-          />
+            transition={transition}
+            style={{ opacity: hidden === item.params.id ? 0 : 1 }}
+          >
+            <DndSortableWrapper
+              params={item.params}
+              key={item.params.id}
+              render={render}
+            />
+          </motion.div>
         ))}
-      </SortableContext>
 
-      <DndPresentational>{props.render({ id: activeID })}</DndPresentational>
-    </>
+        <DndPresentational render={render} setHidden={setHidden} />
+      </SortableContext>
+    </LayoutGroup>
   );
 };

@@ -1,9 +1,10 @@
 "use client";
 import { useContext, useState } from "react";
 import { DndSortableGroup } from "~/components/dnd/dndSortableGroup";
-import { SortableItem } from "~/types/dnd";
+import { DraggableItem, SortableItem } from "~/types/dnd";
 import { LayoutGroup, motion } from "framer-motion";
-import { SortableCTX } from "~/components/dnd/dndContext";
+import { DraggableCTX, SortableCTX } from "~/components/dnd/dndContext";
+import { reorderItems, useDndIntersectionMonitor } from "~/utils/dnd";
 
 type Props = {
   searchParams: { id: string };
@@ -12,27 +13,37 @@ type Props = {
 export default function HomePage({ searchParams }: Props) {
   const [list, setList] = useState<SortableItem[]>([]);
 
-  const Exercise: React.FC = () => {
+  useDndIntersectionMonitor({
+    holdOverTime: 750,
+    holdOverThreshold: 0.2,
+
+    onDragMove({ active, over }) {
+      setList(reorderItems(list, active, over));
+    },
+
+    onDragHoldover({ active, over }) {
+      console.log("Holdover", active, over);
+    },
+  });
+
+  type ExerciseProps = {
+    id: string;
+    overlay?: boolean;
+  };
+
+  const Exercise = ({ id }: ExerciseProps) => {
     const value = useContext(SortableCTX);
-
-    const { setNodeRef, attributes, listeners, isDragging } = value || {};
-
-    const style = {
-      opacity: isDragging ? 0 : 1,
-    };
+    const { setNodeRef, attributes, listeners } = value || {};
 
     return (
-      <motion.div
-        layout="position"
-        transition={{ duration: 0.2 }}
+      <div
         className="bg-red-300 p-3"
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        style={style}
       >
         test
-      </motion.div>
+      </div>
     );
   };
 
@@ -43,8 +54,6 @@ export default function HomePage({ searchParams }: Props) {
       return [
         ...prev,
         {
-          element: <Exercise key={id} />,
-
           params: {
             id: id,
           },
@@ -53,24 +62,19 @@ export default function HomePage({ searchParams }: Props) {
     });
   };
 
-  const receiveNewList = (newList: SortableItem[]) => {
-    setList(newList);
+  const render = (props: any) => {
+    return (
+      <Exercise key={props.id} {...props}>
+        {props.id}
+      </Exercise>
+    );
   };
 
   return (
     <LayoutGroup>
       <div className="container flex flex-col gap-3">
         <button onClick={addToList}>add to list</button>
-
-        <DndSortableGroup
-          items={list}
-          receiveNewList={receiveNewList}
-          render={(props) => (
-            <Exercise key={props.id} {...props}>
-              {props.id}
-            </Exercise>
-          )}
-        />
+        <DndSortableGroup items={list} render={render} />
       </div>
     </LayoutGroup>
   );
