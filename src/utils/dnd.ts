@@ -9,7 +9,6 @@ import type {
   CollisionDescriptor,
   CollisionDetection,
 } from "@dnd-kit/core/dist/utilities/algorithms/types";
-import { DraggableItem, SortableItem } from "~/types/dnd";
 import { Active, DndMonitorListener, Over, useDndMonitor } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
@@ -33,25 +32,13 @@ export const useDndIntersectionMonitor = ({
   ...handlers
 }: useDndIntersectionMonitor) => {
   const [overTimeout, setOverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [peakIntersection, setPeakIntersection] = useState<number | null>(null);
 
-  const intersectionCheck = (event: DragMoveEvent) => {
-    const { active, over, collisions } = event;
-
-    if (!collisions || !over || active.id === over.id) {
-      return;
-    }
-    const intersectionRatio = collisions[0]?.data?.intersectionRatio;
-
-    if (intersectionRatio >= holdOverThreshold && !overTimeout) {
-      const id = setTimeout(() => {
-        onDragHoldover?.(event);
-      }, holdOverTime);
-      setOverTimeout(id);
-    }
-    if (intersectionRatio < holdOverThreshold && overTimeout) {
-      intersectionCleanup();
-    }
-    return intersectionRatio > 0;
+  const startIntersectionTimeout = (event: DragMoveEvent) => {
+    const id = setTimeout(() => {
+      onDragHoldover?.(event);
+    }, holdOverTime);
+    setOverTimeout(id);
   };
 
   const intersectionCleanup = () => {
@@ -59,6 +46,44 @@ export const useDndIntersectionMonitor = ({
       clearTimeout(overTimeout);
       setOverTimeout(null);
     }
+    setPeakIntersection(null);
+  };
+
+  const intersectionCheck = (event: DragMoveEvent) => {
+    const { active, over, collisions } = event;
+
+    if (!collisions || !over || active.id === over.id) {
+      return;
+    }
+
+    const intersectionRatio: number = collisions[0]?.data?.intersectionRatio;
+
+    if (!intersectionRatio) {
+      intersectionCleanup();
+      return false;
+    }
+
+    if (!peakIntersection) {
+      setPeakIntersection(intersectionRatio);
+    }
+
+    if (peakIntersection && intersectionRatio > peakIntersection) {
+      setPeakIntersection(intersectionRatio);
+    }
+
+    if (peakIntersection && intersectionRatio < peakIntersection) {
+      intersectionCleanup();
+      return false;
+    }
+
+    if (intersectionRatio >= holdOverThreshold && !overTimeout) {
+      startIntersectionTimeout(event);
+    }
+    if (intersectionRatio < holdOverThreshold && overTimeout) {
+      intersectionCleanup();
+    }
+
+    return intersectionRatio;
   };
 
   useDndMonitor({
@@ -80,22 +105,6 @@ export const useDndIntersectionMonitor = ({
 ////////////////////////////////////////
 // DND Utility functions ///////////////
 ////////////////////////////////////////
-
-export const reorderItems = (
-  items: SortableItem[],
-  active: Active,
-  over: Over | null,
-) => {
-  if (!over) {
-    return items;
-  }
-  const newSets = arrayMove(
-    items,
-    items.findIndex((item) => item.params.id === active.id),
-    items.findIndex((item) => item.params.id === over.id),
-  );
-  return newSets;
-};
 
 function getCenterOfRectangle(rect: ClientRect): Coordinates {
   return {
@@ -166,27 +175,12 @@ export function sortCollisionsAsc(
   return a - b;
 }
 
-export const isDeltaInBounds = (
-  initial: ClientRect | null,
-  current: ClientRect | null,
-  threshold: number,
-) => {
-  if (!initial || !current) {
-    return false;
-  }
-  const deltaX = Math.abs(initial.left - current.left);
-  const deltaY = Math.abs(initial.top - current.top);
-  return deltaX < threshold && deltaY < threshold;
-};
-
 export const closestCenterWithIntersection: CollisionDetection = ({
   collisionRect,
   droppableRects,
   droppableContainers,
-  active,
 }) => {
   const collisions: CollisionDescriptor[] = [];
-  const activeRect = droppableRects.get(active.id);
   const activeCenter = getCenterOfRectangle(collisionRect);
 
   for (const droppableContainer of droppableContainers) {
@@ -194,7 +188,6 @@ export const closestCenterWithIntersection: CollisionDetection = ({
     const rect = droppableRects.get(id);
 
     if (rect) {
-      const inBounds = isDeltaInBounds(collisionRect, activeRect!, 50);
       const droppableCenter = getCenterOfRectangle(rect);
       const distBetween = distanceBetween(droppableCenter, activeCenter);
       const intersectionRatio = getIntersectionRatio(rect, collisionRect);
@@ -204,7 +197,7 @@ export const closestCenterWithIntersection: CollisionDetection = ({
         data: {
           droppableContainer,
           value: distBetween,
-          intersectionRatio: inBounds ? intersectionRatio : 0,
+          intersectionRatio: intersectionRatio,
         },
       });
     }

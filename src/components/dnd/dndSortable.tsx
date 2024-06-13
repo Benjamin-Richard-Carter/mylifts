@@ -1,18 +1,21 @@
 "use client";
 import { UseSortableArguments, useSortable } from "@dnd-kit/sortable";
 import { SortableCTX } from "./dndContext";
+import { PropsWithChildren } from "react";
 
 type Props = {
   params: UseSortableArguments;
-  render: any;
 };
 
-export const DndSortableWrapper = ({ params, render }: Props) => {
+export const DndSortableWrapper = ({
+  params,
+  children,
+}: PropsWithChildren<Props>) => {
   const sortableReturn = useSortable({ ...params });
 
   return (
-    <SortableCTX.Provider value={{ ...sortableReturn }}>
-      {render({ id: params.id })}
+    <SortableCTX.Provider value={{ ...sortableReturn }} key={params.id}>
+      {children}
     </SortableCTX.Provider>
   );
 };

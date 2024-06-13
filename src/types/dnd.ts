@@ -13,6 +13,14 @@ export type DraggableItem = {
   params: UseDraggableArguments;
 };
 
+export type SortableArray = (SortableItem | SortableGroup)[];
+
 export type SortableItem = {
+  id: string;
   params: UseSortableArguments;
+  render: any;
+};
+
+export type SortableGroup = SortableItem & {
+  children: SortableItem[];
 };

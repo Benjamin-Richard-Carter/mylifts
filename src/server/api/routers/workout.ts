@@ -55,17 +55,79 @@ export const workoutRouter = createTRPCRouter({
     .input(
       z.object({
         targetSetID: z.string(),
+        newSetID: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      // search setGroups to find the group that the targetSetID is in
+
+      const oldSetGroup = await db.setGroup.findFirst({
+        where: {
+          sets: {
+            some: {
+              id: input.targetSetID,
+            },
+          },
+        },
+      });
+
+      const newSetGroup = await db.setGroup.findFirst({
+        where: {
+          sets: {
+            some: {
+              id: input.newSetID,
+            },
+          },
+        },
+      });
+
+      await db.$transaction([
+        db.set.update({
+          where: { id: input.targetSetID },
+          data: { setGroup: { connect: { id: newSetGroup?.id } } },
+        }),
+
+        // if the oldSetGroup has no more sets, delete it
+
+        db.setGroup.deleteMany({
+          where: {
+            id: oldSetGroup?.id,
+            sets: {
+              none: {},
+            },
+          },
+        }),
+      ]);
+    }),
+
+  mergeSetGroup: protectedProcedure
+    .input(
+      z.object({
+        mergingGroupID: z.string(),
         targetGroupID: z.string(),
       }),
     )
     .mutation(async ({ input }) => {
-      const [newset] = await db.$transaction([
-        db.set.update({
-          where: { id: input.targetSetID },
-          data: { setGroup: { connect: { id: input.targetGroupID } } },
-        }),
+      const mergingGroup = await db.setGroup.findUnique({
+        where: { id: input.mergingGroupID },
+        include: { sets: true },
+      });
 
-        //db.setGroup.delete({ where: { id: input.targetGroupID } }),
+      const targetGroup = await db.setGroup.findUnique({
+        where: { id: input.targetGroupID },
+        include: { sets: true },
+      });
+
+      if (!mergingGroup || !targetGroup) {
+        throw new Error("Invalid group ID");
+      }
+
+      await db.$transaction([
+        db.set.updateMany({
+          where: { setGroupId: input.mergingGroupID },
+          data: { setGroupId: input.targetGroupID },
+        }),
+        db.setGroup.delete({ where: { id: input.mergingGroupID } }),
       ]);
     }),
 
@@ -86,7 +148,13 @@ export const workoutRouter = createTRPCRouter({
             select: {
               id: true,
               index: true,
-              sets: true,
+              sets: {
+                select: {
+                  id: true,
+                  index: true,
+                  exerciseId: true,
+                },
+              },
             },
           },
         },

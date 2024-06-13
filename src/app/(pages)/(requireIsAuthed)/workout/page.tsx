@@ -1,80 +1,178 @@
 "use client";
-import { useContext, useState } from "react";
+import { PropsWithChildren, useContext } from "react";
 import { DndSortableGroup } from "~/components/dnd/dndSortableGroup";
-import { DraggableItem, SortableItem } from "~/types/dnd";
 import { LayoutGroup, motion } from "framer-motion";
-import { DraggableCTX, SortableCTX } from "~/components/dnd/dndContext";
-import { reorderItems, useDndIntersectionMonitor } from "~/utils/dnd";
+import { SortableCTX } from "~/components/dnd/dndContext";
+import { useDndIntersectionMonitor } from "~/utils/dnd";
+import { api } from "~/trpc/react";
+import { SortableArray } from "~/types/dnd";
 
 type Props = {
   searchParams: { id: string };
 };
 
 export default function HomePage({ searchParams }: Props) {
-  const [list, setList] = useState<SortableItem[]>([]);
+  const workout = api.workout.getWorkout.useQuery({
+    workoutID: searchParams.id,
+  });
 
-  useDndIntersectionMonitor({
-    holdOverTime: 750,
-    holdOverThreshold: 0.2,
+  const refetch = workout.refetch;
 
-    onDragMove({ active, over }) {
-      setList(reorderItems(list, active, over));
-    },
-
-    onDragHoldover({ active, over }) {
-      console.log("Holdover", active, over);
+  const createGroup = api.workout.createSetAndGroup.useMutation({
+    onSuccess: () => {
+      refetch();
     },
   });
 
-  type ExerciseProps = {
-    id: string;
-    overlay?: boolean;
+  const mergeSetIntoGroup = api.workout.mergeSetIntoGroup.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const handleMergeSetIntoGroup = async (
+    targetSetID: string,
+    newSetID: string,
+  ) => {
+    await mergeSetIntoGroup.mutateAsync({
+      targetSetID,
+      newSetID,
+    });
   };
 
-  const Exercise = ({ id }: ExerciseProps) => {
-    const value = useContext(SortableCTX);
-    const { setNodeRef, attributes, listeners } = value || {};
+  const handleCreateGroup = async (
+    workoutID: string,
+    newGroupIndex: string,
+  ) => {
+    await createGroup.mutateAsync({
+      workoutID,
+      newGroupIndex,
+    });
+  };
+
+  const setGroups = workout.data?.setGroups;
+  type setGroups = typeof setGroups;
+
+  type createSortableArray = (setGroups: setGroups) => SortableArray | null;
+
+  const createSortableArray: createSortableArray = (setGroups) => {
+    if (!setGroups) return null;
+
+    return setGroups.map((group) => {
+      return {
+        id: group.id,
+        params: {
+          id: group.id,
+          data: { type: "group" },
+        },
+        render: (props: any) => {
+          return <DraggableGroup key={props.id} {...props} />;
+        },
+        children: group.sets.map((set) => {
+          return {
+            id: set.id,
+            params: {
+              id: set.id,
+              data: { type: "set" },
+            },
+            render: (props: any) => {
+              return <DraggableItem key={props.id} {...props} />;
+            },
+          };
+        }),
+      };
+    });
+  };
+
+  const tree = createSortableArray(setGroups);
+
+  useDndIntersectionMonitor({
+    holdOverTime: 300,
+    holdOverThreshold: 0.2,
+    onDragHoldover({ active, over }) {
+      console.log("holdover registered");
+      if (!over || !active) return;
+
+      const activeType = active.data.current?.type;
+      const overType = over.data.current?.type;
+
+      if (activeType === "group" && overType === "group") {
+        console.log("group to group");
+      }
+
+      if (activeType === "set" && overType === "set") {
+        console.log("set to set");
+
+        handleMergeSetIntoGroup(active.id as string, over.id as string);
+      }
+
+      if (activeType === "set" && overType === "group") {
+        console.log("set to group");
+      }
+
+      // const doesActiveAcceptOver = active.data.current?.accepts.some(
+      //   (accepts) => over.data.current?.accepts.includes(accepts),
+      // );
+
+      //handleMerge(active.id as string, over.id as string);
+    },
+
+    onDragMove({ active, over }) {
+      console.log("drag move registered");
+    },
+  });
+
+  type Props = {
+    id: string;
+  };
+
+  const DraggableItem = ({ id, children }: PropsWithChildren<Props>) => {
+    const { setNodeRef, listeners, attributes } = useContext(SortableCTX) || {};
 
     return (
       <div
-        className="bg-red-300 p-3"
-        ref={setNodeRef}
-        {...attributes}
+        className={`flex select-none flex-col gap-1 bg-green-500 p-2`}
         {...listeners}
+        {...attributes}
+        ref={setNodeRef}
       >
-        test
+        <div className="flex flex-row justify-between">
+          <span>{id}</span>
+        </div>
+
+        <div className="flex flex-col gap-1">{children}</div>
       </div>
     );
   };
 
-  const addToList = () => {
-    const id = Math.random().toString(36).slice(2, 7);
+  const DraggableGroup = ({ id, children }: PropsWithChildren<Props>) => {
+    const { setNodeRef, listeners, attributes } = useContext(SortableCTX) || {};
 
-    setList((prev) => {
-      return [
-        ...prev,
-        {
-          params: {
-            id: id,
-          },
-        },
-      ];
-    });
-  };
-
-  const render = (props: any) => {
     return (
-      <Exercise key={props.id} {...props}>
-        {props.id}
-      </Exercise>
+      <motion.div
+        className={`flex select-none flex-col gap-1 bg-red-500 p-2`}
+        layout
+        {...listeners}
+        {...attributes}
+        ref={setNodeRef}
+      >
+        <div className="flex flex-row justify-between">
+          <span>{id}</span>
+        </div>
+
+        <div className="flex flex-col gap-1">{children}</div>
+      </motion.div>
     );
   };
 
   return (
     <LayoutGroup>
+      <button onClick={() => handleCreateGroup(searchParams.id, "1")}>
+        Create Group
+      </button>
+
       <div className="container flex flex-col gap-3">
-        <button onClick={addToList}>add to list</button>
-        <DndSortableGroup items={list} render={render} />
+        {tree && <DndSortableGroup items={tree} />}
       </div>
     </LayoutGroup>
   );

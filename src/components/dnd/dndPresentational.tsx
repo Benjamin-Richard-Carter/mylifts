@@ -5,17 +5,19 @@ import {
   UniqueIdentifier,
   useDndMonitor,
 } from "@dnd-kit/core";
-import { useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import { getEventRects, getRectTransform } from "~/utils/dnd";
 import { motion } from "framer-motion";
 import { PresentationalCTX } from "~/components/dnd/dndContext";
 
 type Props = {
-  render: any;
   setHidden: (id: UniqueIdentifier | null) => void;
 };
 
-export const DndPresentational = ({ render, setHidden }: Props) => {
+export const DndPresentational = ({
+  children,
+  setHidden,
+}: PropsWithChildren<Props>) => {
   const [activeData, setActiveData] = useState<DragMoveEvent | null>(null);
   const [finalData, setFinalData] = useState<DragEndEvent | null>(null);
   const [initialActiveRect, translatedActiveRect] = getEventRects(activeData);
@@ -23,12 +25,12 @@ export const DndPresentational = ({ render, setHidden }: Props) => {
   const transform = getRectTransform(initialActiveRect, translatedActiveRect);
 
   useDndMonitor({
-    onDragStart(event) {
-      setHidden(event.active.id);
-      setFinalData(null);
+    onDragStart() {
+      handleCleanup();
     },
     onDragMove(event) {
       setActiveData(event);
+      setHidden(event.active.id);
     },
     onDragEnd(event) {
       setFinalData(event);
@@ -37,29 +39,34 @@ export const DndPresentational = ({ render, setHidden }: Props) => {
   });
 
   const handleCleanup = () => {
-    setHidden(null);
     setFinalData(null);
+    setHidden(null);
   };
 
   return (
     <PresentationalCTX.Provider value={activeData}>
       {activeData && (
         <motion.div
-          style={{ position: "fixed", transform, ...initialActiveRect }}
+          style={{
+            position: "fixed",
+            transform,
+            ...initialActiveRect,
+            zIndex: 999,
+          }}
         >
-          {render({ id: "placeholder" })}
+          {children}
         </motion.div>
       )}
 
       {finalData && (
         <motion.div
           transition={{ type: "spring", duration: 0.5 }}
-          style={{ position: "fixed" }}
+          style={{ position: "fixed", zIndex: 999 }}
           initial={{ ...translatedFinalRect }}
           animate={{ ...initialFinalRect }}
           onAnimationComplete={() => handleCleanup()}
         >
-          {render({ id: "exiting" })}
+          {children}
         </motion.div>
       )}
     </PresentationalCTX.Provider>
